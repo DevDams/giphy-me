@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container header">
     <div class="content">
       <h1>G.Gen</h1>
     </div>
