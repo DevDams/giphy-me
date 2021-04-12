@@ -1,5 +1,8 @@
 <template>
-  <div class="hello">
+  <div class="container">
+    <input type="text" name="query" placeholder="Cherhcer..." v-model="query" autocomplete="off">
+    <h1>Bienvenue sur Ghiphy-gen</h1>
+    <p>Rechercher et télécharger des gifs qui vous feront rire</p>
     <button @click="download">click</button>
   </div>
 </template>
@@ -11,7 +14,7 @@ export default {
   name: 'Giphy',
   data () {
     return {
-      query: 'coconut',
+      query: '',
       api_key: '1CGNJI8lyPAbgiZdoJ5844P14yPrRd4F',
       base_url: 'https://api.giphy.com/v1/gifs/search?api_key=${api_key}&q=${query}&limit=25&offset=0&rating=g&lang=en',
       load: ''
@@ -40,7 +43,6 @@ export default {
         link.setAttribute("download", 'file.gif')
         document.body.appendChild(link)
         link.click()
-        // console.log(response.data)
       })
     }
   }
@@ -49,18 +51,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.container {
+  width: 90%;
+  margin: auto;
+  margin-top: 60px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+
+input {
+  height: 45px;
+  width: 90%;
+  margin: auto;
+  border: none;
+  border-radius: 8px;
+  box-shadow:  44px 44px 76px #b8bbbe,
+             -44px -44px 76px #ffffff;
 }
 </style>
