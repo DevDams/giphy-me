@@ -14,11 +14,16 @@
         </button>
       </div>
     </div>
+    <!-- Trends gif animation -->
     <div class="random_gif">
       <div class="random_img" v-for="gif in load" :key="gif.id">
-        <img :src="gif.images.original.url" alt="">
-        <p>{{ gif.title }}</p>
+        <img :src="gif.images.original.url" :class="gif.title" alt="gif">
+        <!-- <p>{{ text(gif) }}</p> -->
       </div>
+    </div>
+    <!-- Trends gif detail -->
+    <div class="detail">
+
     </div>
   </div>
 </template>
@@ -39,6 +44,7 @@ export default {
     }
   },
   methods: {
+    // TRENDS GIF FETCH
     randomGif () {
       axios({
         url: `https://api.giphy.com/v1/gifs/trending?api_key=${this.api_key}&limit=25&rating=g`,
@@ -50,6 +56,16 @@ export default {
       this.show_about = false
       this.show_random = true
     },
+    // TRENDS GIF TITLE
+    // text (txt) {
+    //   let title_text = ''
+    //   let title = txt.title.split(' ').indexOf('GIF')
+    //   for (let i = 0; i < title; i++) {
+    //     title_text += txt.title.split(' ')[i] + ' '
+    //   }
+    //   return title_text
+    // },
+    // INPUT FETCH
     fetchGif () {
       axios({
         url: `https://api.giphy.com/v1/gifs/search?api_key=${this.api_key}&q=${this.query}&limit=25&offset=0&rating=g&lang=en`,
@@ -59,6 +75,7 @@ export default {
         console.log("input fetch", this.load)
       })
     },
+    // DOWNLOAD GIF
     download () {
       axios({
         url: `${this.load}`,
@@ -99,7 +116,9 @@ export default {
 }
 
 .about_box {
+  width: 90%;
   height: 600px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,6 +169,7 @@ export default {
 }
 
 .random_gif .random_img {
+  position: relative;
   margin: 22px 0;
   width: 160px;
   height: 280px;
@@ -167,9 +187,28 @@ export default {
   border-radius: 10px;
 }
 
+.random_gif .random_img p {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 156px;
+  height: 40px;
+  margin-top: -30px;
+  background-color: #141719;
+  color: #fdffff;
+  bottom: 0;
+  border-bottom-right-radius: 11px;
+  border-bottom-left-radius: 11px;
+}
+
 @media (max-width: 345px) {
   .random_gif .random_img {
     width: 200px;
+  }
+
+  .random_gif .random_img p {
+    width: 198px;
   }
 }
 </style>
