@@ -3,6 +3,7 @@
     <div class="search_box">
       <input type="text" name="query" placeholder="Cherhcer..." v-model="query" autocomplete="off" @keypress="fetchGif">
     </div>
+    <!-- About giphy-gen box -->
     <div class="about_box" v-if="show_about">
       <div class="about_content">
         <h1>Bienvenue sur Ghiphy-gen</h1>
@@ -14,16 +15,16 @@
         </button>
       </div>
     </div>
+    <!-- Loader -->
+    <div class="loader" v-if="loader">
+      <img src="@/assets/loader/tail-spin.svg" alt="data loader">
+    </div>
     <!-- Trends gif animation -->
     <div class="random_gif">
       <div class="random_img" v-for="gif in load" :key="gif.id">
         <img :src="gif.images.original.url" :class="gif.title" alt="gif">
         <!-- <p>{{ text(gif) }}</p> -->
       </div>
-    </div>
-    <!-- Trends gif detail -->
-    <div class="detail">
-
     </div>
   </div>
 </template>
@@ -35,6 +36,7 @@ export default {
   name: 'Giphy',
   data () {
     return {
+      loader: false,
       show_about: true,
       show_random: false,
       query: '',
@@ -46,11 +48,13 @@ export default {
   methods: {
     // TRENDS GIF FETCH
     randomGif () {
+      this.loader = true
       axios({
         url: `https://api.giphy.com/v1/gifs/trending?api_key=${this.api_key}&limit=25&rating=g`,
         method: 'GET',
       }).then(response => {
         this.load = response.data.data
+        this.loader = false
         console.log("go fetch", this.load)
       })
       this.show_about = false
