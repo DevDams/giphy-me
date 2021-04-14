@@ -29,7 +29,7 @@ export default {
 
 body {
   /* #aabad9 */
-  background-color: #F1F3F6;
+  background: #F4FAFF;
   font-family: 'Poppins', sans-serif;
 }
 

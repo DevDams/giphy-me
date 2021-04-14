@@ -1,14 +1,14 @@
 <template>
   <div class="container giphy">
     <div class="search_box">
-      <input type="text" name="query" placeholder="Cherhcer..." v-model="query" autocomplete="off" @keypress="fetchGif">
+      <input type="text" name="query" placeholder="Cherhcer..." v-model="query" autocomplete="off" @keyup.enter="fetchGif">
     </div>
     <!-- About giphy-gen box -->
     <div class="about_box" v-if="show_about">
       <div class="about_content">
         <h1>Bienvenue sur Ghiphy-gen</h1>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae harum obcaecati unde ipsam a quam voluptatem accusantium magni saepe quod.
+          Rechercher et télécharger gratuitement et sans effort des images animées (gif) en rapport avec ce que vos mots sont incapable d'exprimer.
         </p>
         <button @click="randomGif">
           <img src="@/assets/icon/arrow.svg" alt="arrow">
@@ -21,7 +21,7 @@
     </div>
     <!-- Trends gif animation -->
     <div class="random_gif" v-if="show_random">
-      <h1>Gif populaire</h1>
+      <h1>Gif {{ index }}</h1>
       <div class="random_img" v-for="gif in load" :key="gif.id">
         <img :src="gif.images.original.url" :class="gif.title" alt="gif">
         <div class="radom_download" @click="download(gif)">
@@ -44,6 +44,7 @@ export default {
       show_about: true,
       show_random: false,
       query: '',
+      index: '',
       api_key: '1CGNJI8lyPAbgiZdoJ5844P14yPrRd4F',
       base_url: 'https://api.giphy.com/v1/gifs/search?api_key=${api_key}&q=${query}&limit=25&offset=0&rating=g&lang=en',
       load: ''
@@ -52,6 +53,7 @@ export default {
   methods: {
     // TRENDS GIF FETCH
     randomGif () {
+      this.index = 'populaire'
       this.loader = true
       axios({
         url: `https://api.giphy.com/v1/gifs/trending?api_key=${this.api_key}&limit=25&rating=g`,
@@ -75,11 +77,16 @@ export default {
     // },
     // INPUT FETCH
     fetchGif () {
+      this.index = this.query
+      this.loader = true
+      this.show_about = false
+      this.show_random = true
       axios({
         url: `https://api.giphy.com/v1/gifs/search?api_key=${this.api_key}&q=${this.query}&limit=25&offset=0&rating=g&lang=en`,
         method: 'GET',
       }).then(response => {
         this.load = response.data.data
+        this.loader = false
         console.log("input fetch", this.load)
       })
     },
@@ -116,8 +123,8 @@ export default {
   margin: auto;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(145deg, #d9dbdd, #ffffff);
-  box-shadow:  11px 11px 22px #d2d3d6,
+  background: linear-gradient(145deg, #fefefe, #dce1e6);
+  box-shadow:  11px 11px 22px #dce1e6,
              -11px -11px 22px #ffffff;
   text-align: center;
   outline: none;
@@ -165,6 +172,7 @@ export default {
   margin-top: 10px;
   text-transform: uppercase;
   line-height: 1em;
+  color: #93ADCF;
 }
 
 .about_box .about_content p {
@@ -197,10 +205,13 @@ export default {
 }
 
 .random_gif h1 {
+  width: 100%;
+  justify-self: center;
   margin-top: 30px;
   margin-bottom: 25px;
   text-transform: uppercase;
   letter-spacing: -1px;
+  color: #1F857C;
 }
 
 .random_gif .random_img {
