@@ -20,9 +20,13 @@
       <img src="@/assets/loader/tail-spin.svg" alt="data loader">
     </div>
     <!-- Trends gif animation -->
-    <div class="random_gif">
+    <div class="random_gif" v-if="show_random">
+      <h1>Gif populaire</h1>
       <div class="random_img" v-for="gif in load" :key="gif.id">
         <img :src="gif.images.original.url" :class="gif.title" alt="gif">
+        <div class="radom_download" @click="download(gif)">
+          <img src="@/assets/icon/download.svg" alt="download icon">
+        </div>
         <!-- <p>{{ text(gif) }}</p> -->
       </div>
     </div>
@@ -55,10 +59,10 @@ export default {
       }).then(response => {
         this.load = response.data.data
         this.loader = false
+        this.show_random = true
         console.log("go fetch", this.load)
       })
       this.show_about = false
-      this.show_random = true
     },
     // TRENDS GIF TITLE
     // text (txt) {
@@ -80,16 +84,16 @@ export default {
       })
     },
     // DOWNLOAD GIF
-    download () {
+    download (base) {
       axios({
-        url: `${this.load}`,
+        url: `${base.images.original.url}`,
         method: 'GET',
         responseType: 'blob'
       }).then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        link.setAttribute("download", 'file.gif')
+        link.setAttribute("download", `${base.title}.gif`)
         document.body.appendChild(link)
         link.click()
       })
@@ -101,26 +105,45 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
-  width: 100%;
+  width: 90%;
   height: 100%;
   margin: 60px auto;
 }
 
 .search_box input {
-  height: 50px;
+  height: 60px;
   width: 90%;
   margin: auto;
   border: none;
   border-radius: 8px;
-  box-shadow:  29px 29px 50px #c9cccf,
-             -29px -29px 50px #ffffff;
+  background: linear-gradient(145deg, #d9dbdd, #ffffff);
+  box-shadow:  11px 11px 22px #d2d3d6,
+             -11px -11px 22px #ffffff;
   text-align: center;
   outline: none;
   text-transform: uppercase;
+  color: #32373D;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+.search_box input::placeholder {
+  color: #32373D;
+}
+
+.loader {
+  width: 100%;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader img {
+  width: 100px;
 }
 
 .about_box {
-  width: 90%;
   height: 600px;
   margin: auto;
   display: flex;
@@ -131,22 +154,23 @@ export default {
 .about_box .about_content {
   padding: 30px 15px;
   height: 400px;
-  border: 3px solid rgb(245, 245, 245);
+  /* border: 2px solid #32373D; */
   border-radius: 8px;
-  background: linear-gradient(145deg, #fdffff, #d4d8db);
-  box-shadow:  26px 26px 52px #d0d3d6,
-             -26px -26px 52px #ffffff;
+  background: linear-gradient(145deg, #ffffff, #d9dbdd);
+  box-shadow:  11px 11px 38px #d2d3d6,
+             -11px -11px 38px #ffffff;
 }
 
 .about_box .about_content h1 {
-  margin-top: 20px;
+  margin-top: 10px;
   text-transform: uppercase;
-  letter-spacing: -2px;
+  line-height: 1em;
 }
 
 .about_box .about_content p {
-  margin-top: 50px;
-  color: #374955;
+  margin-top: 30px;
+  color: #595A5D;
+  font-weight: 500;
 }
 
 .about_box .about_content button {
@@ -172,16 +196,24 @@ export default {
   flex-wrap: wrap;
 }
 
+.random_gif h1 {
+  margin-top: 30px;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
 .random_gif .random_img {
   position: relative;
   margin: 22px 0;
   width: 160px;
   height: 280px;
-  border: 2px solid black;
+  border: 3px solid #F4FAFF;
+  padding: 10px;
   border-radius: 12px;
-  background: linear-gradient(145deg, #fdffff, #d4d8db);
-  box-shadow:  12px 12px 24px #b8bbbe,
-              -12px -12px 24px #ffffff;
+  background: #F1F3F6;
+  box-shadow:  11px 11px 16px #e7e9ec,
+             -11px -11px 16px #fbfdff;
 }
 
 .random_gif .random_img img {
@@ -204,6 +236,19 @@ export default {
   bottom: 0;
   border-bottom-right-radius: 11px;
   border-bottom-left-radius: 11px;
+}
+
+.random_gif .random_img .radom_download {
+  position: absolute;
+  padding: 10px;
+  bottom: 10px;
+  right: 10px;
+  width: 45px;
+  height: 45px;
+  border: 2px solid black;
+  border-radius: 12px;
+  background: linear-gradient(315deg, #d7e7fd, #b5c2d4);
+  box-shadow:  5px 5px 10px #cbdaee;
 }
 
 @media (max-width: 345px) {
